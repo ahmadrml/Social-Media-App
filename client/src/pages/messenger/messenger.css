@@ -1,0 +1,74 @@
+.messengerContainer {
+  height: calc(100vh - 70px);
+  display: flex;
+}
+
+.chatMenu {
+  flex: 3.5;
+}
+
+.chatBox {
+  flex: 5.5;
+}
+
+.chatOnline {
+  flex: 3;
+}
+
+.chatBoxWrapper,
+.chatMenuWrapper,
+.chatOnlineWrapper {
+  padding: 10px;
+  height: 100%;
+}
+
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.noconvText {
+  position: absolute;
+  top: 10%;
+  font-size: 50px;
+  color: rgb(160, 159, 159);
+  cursor: default;
+}
+
+.chatMenuInput {
+  width: 90%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.chatBoxTop {
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.chatBoxBottom {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatMsgInput {
+  width: 80%;
+  height: 90px;
+  padding: 15px;
+  resize: none;
+}
+
+.chatBtnSubmit {
+  width: 70px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: teal;
+  color: white;
+}

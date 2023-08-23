@@ -1,0 +1,27 @@
+import { io } from "socket.io-client";
+
+const [onlineUsers, setOnlineUsers] = useState([]);
+const socket = useRef();
+
+
+useEffect(() => {
+  socket.current = io("ws://127.0.0.1:8900");
+} , []) 
+
+useEffect(() => {
+    socket.current.emit("addUser", currentUser._id);
+    socket.current.on("getUsers", (users) => {
+      const findOnlineFriends = async () => {
+        try {
+          const onlineFriends =  currentUser.following.filter((f) => users.some((u) => u.userId === f));
+          const res = await axios.get("/api/users?userId="+onlineFriends);
+          console.log(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      findOnlineFriends();
+    }
+      
+    );
+  }, [currentUser]);
