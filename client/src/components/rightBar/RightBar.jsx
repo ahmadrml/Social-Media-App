@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { io } from "socket.io-client";
 
 function createOnlineUser(u) {
   return <Online key={u.id} user={u} />;
@@ -21,7 +22,35 @@ const RightBar = ({ user }) => {
   const [followed, setFollowed] = useState(
     currentUser.following.includes(user?._id)
   );
-  
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io("ws://127.0.0.1:8900");
+  }, []);
+
+  useEffect(() => {
+    socket.current.emit("addUser", currentUser._id);
+    socket.current.on("getUsers", (users) => {
+      const findOnlineFriends = async () => {
+        try {
+          const onlineFriends = currentUser.following.filter((f) =>
+            users.some((u) => u.userId === f)
+          );
+          onlineFriends.forEach((element) => {
+            const findFriends = async () => {
+              const res = await axios.get("/api/users?userId=" + element);
+              setOnlineUsers(res.data);
+            };
+            findFriends();
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      findOnlineFriends();
+    });
+  }, [currentUser , onlineUsers]);
 
   useEffect(() => {
     const getFriends = async () => {
@@ -70,7 +99,11 @@ const RightBar = ({ user }) => {
         <img src={PF + "ad.png"} className="rightbarAd" />
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="onlineFriendsList">
-          {/* {onlineUsers.map(createOnlineUser)} */}
+          {Array.isArray(onlineUsers) ? (
+            onlineUsers.map((u) => <Online key={u.id} user={u} />)
+          ) : (
+            <Online key={onlineUsers._id} user={onlineUsers} />
+          )}
         </ul>
       </>
     );

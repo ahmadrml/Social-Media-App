@@ -31,9 +31,13 @@ const Topbar = () => {
 
   return (
     <div className="topBarContainer">
-      <div className="topBarLeft">
-        <span className="logo">AhmadSocial</span>
-      </div>
+      {
+        <Link to="/" className="topBarLeft">
+          <div >
+            <span className="logo">AhmadSocial</span>
+          </div>
+        </Link>
+      }
       <div className="topBarCenter">
         <div className="searchBar">
           <SearchIcon className="searchIcon" />

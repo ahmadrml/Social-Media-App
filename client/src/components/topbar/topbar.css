@@ -59,6 +59,7 @@
 
 .topBarLeft{
     flex: 3;
+    text-decoration: none;
 }
 
 .topBarCenter{
