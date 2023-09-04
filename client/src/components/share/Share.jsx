@@ -1,6 +1,6 @@
 import "./share.css";
 import { PermMedia, Label, Room, EmojiEmotions } from "@mui/icons-material";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useRef, useState } from "react";
 import axios from "axios";
@@ -11,18 +11,33 @@ const Share = () => {
   const desc = useRef();
   const [file, setFile] = useState(null);
 
-  const submitHandler = () => {
-    const newPost={
-        userId: user._id,
-        desc: desc.current.value,
+  console.log(user.profilePic)
+
+  const submitHandler = async () => {
+    const newPost = {
+      userId: user._id,
+      desc: desc.current.value,
+    };
+
+
+    if (file) {
+      const data = new FormData();
+      const filename = Date.now() + file.name;
+      data.append("name", filename);
+      data.append("file", file);
+      newPost.content = filename;
+
+      try {
+        await axios.post("/api/upload", data );
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     try {
-        axios.post("/api/posts",newPost);
-    } catch (error) {
-        
-    }
-  }
+      axios.post("/api/posts", newPost);
+    } catch (error) {}
+  };
 
   return (
     <div className="share">
@@ -45,8 +60,8 @@ const Share = () => {
         <hr className="shareHr" />
         {file && (
           <div className="shareContentContainer">
-            <img src={URL.createObjectURL(file)} alt="" className="shareImg"/>
-            <CancelIcon className="shareCancel" onClick={()=>setFile(null)}/>
+            <img src={URL.createObjectURL(file)} alt="" className="shareImg" />
+            <CancelIcon className="shareCancel" onClick={() => setFile(null)} />
           </div>
         )}
         <div className="shareBottom">
@@ -59,7 +74,7 @@ const Share = () => {
                 id="file"
                 accept=".png,.jpg,.jpeg"
                 onChange={(e) => setFile(e.target.files[0])}
-                style={{display: "none"}}
+                style={{ display: "none" }}
               />
             </label>
             <div className="shareOption">
@@ -74,7 +89,9 @@ const Share = () => {
               <EmojiEmotions className="shareIcon" htmlColor="goldenrod" />
               <span className="shareOptionText">Feelings</span>
             </div>
-            <button className="shareButton" type="submit">Share</button>
+            <button className="shareButton" type="submit">
+              Share
+            </button>
           </form>
         </div>
       </div>

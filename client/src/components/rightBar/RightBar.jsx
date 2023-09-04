@@ -1,6 +1,5 @@
 import "./rightbar.css";
 import Online from "../online/Online";
-import { Users } from "../../dummyData";
 import Following from "../following/Following";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
@@ -10,10 +9,8 @@ import { AuthContext } from "../../context/AuthContext";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { io } from "socket.io-client";
+import Update from "../../UpdateProf/UpdateProf";
 
-function createOnlineUser(u) {
-  return <Online key={u.id} user={u} />;
-}
 
 const RightBar = ({ user }) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -22,6 +19,7 @@ const RightBar = ({ user }) => {
   const [followed, setFollowed] = useState(
     currentUser.following.includes(user?._id)
   );
+  const [update , setUpdate] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const socket = useRef();
 
@@ -111,12 +109,16 @@ const RightBar = ({ user }) => {
   const ProfileRightBar = () => {
     return (
       <>
-        {user.username !== currentUser.username && (
+        {user.username !== currentUser.username ? (
           <button className="followBtn" onClick={handleClick}>
             {followed ? "Unfollow" : "Follow"}
             {followed ? <RemoveIcon /> : <AddIcon />}
           </button>
-        )}
+        ) :
+        <button className="followBtn" onClick={() => setUpdate(true)}>
+            Update Infos
+          </button> 
+        }
         <h4 className="rightbarTitle">User Informations</h4>
         <div className="rightbarInfo">
           <div className="rightbarInfoItem">
@@ -125,14 +127,14 @@ const RightBar = ({ user }) => {
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">From :</span>
-            <span className="rightbarInfoValue">{user.from}</span>
+            <span className="rightbarInfoValue">{user.country}</span>
           </div>
           <div className="rightbarInfoItem">
             <span className="rightbarInfoKey">RelationShip :</span>
             <span className="rightbarInfoValue">
-              {user.relationShip === "1"
+              {user.relationship === 1
                 ? "single"
-                : user.relationShip === "2"
+                : user.relationship === 2
                 ? "Married"
                 : "-"}
             </span>
@@ -149,6 +151,7 @@ const RightBar = ({ user }) => {
             </Link>
           ))}
         </div>
+        {update && <Update setUpdate={setUpdate} user={currentUser}/>}
       </>
     );
   };

@@ -40,4 +40,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/logout", async (req, res) => {
+  try {
+    req.session.destroy
+    res.redirect("/login")
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;

@@ -27,6 +27,7 @@ const Topbar = () => {
       }
     };
     handleChange();
+
   }, [input]);
 
   return (
@@ -56,7 +57,9 @@ const Topbar = () => {
           <Link to="/" className="topBarLink">
             <span>Home</span>
           </Link>
-          <span className="topBarLink">Timeline</span>
+          <Link to="/messenger" className="topBarLink">
+            <span>Messenger</span>
+          </Link>
         </div>
 
         <div className="topBarIcons">
